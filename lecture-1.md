@@ -36,7 +36,7 @@ This stops learning of neural net. Further it leads to gradient vanishing proble
 
 That's sigmoid function are avoided to set as activation function because this saturated values or neuron generates value tiny gradients that stops learning of neural net
 
-### 2. Sigmoid is zero centered
+### 2. Sigmoid is not zero centered
 
 Sigmoid function outputs values always between 0 and 1. These are always positive numbers. These positive outputs act as inputs to the neurons of the next layer.
 
