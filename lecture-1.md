@@ -274,10 +274,11 @@ The weighted sums keep shrinking at each layer because weights are so small, so 
 >
 > **_Small weights (×0.01) → weighted sum is tiny → tanh receives near-zero input → tanh output is also near zero → next layer receives near-zero inputs → repeat._**
 >
-> **_By deeper layers, all activations are ≈ 0. During backprop, gradient of loss w.r.t. weight is:_**
-> $$ \frac{\partial L}{\partial w} = \frac{\partial L}{\partial a} \times x$$
+> **_By deeper layers, all activations are ≈ 0. During backprop, gradient of loss w.r.t. weight is:_**  
 >
-> **_where $x$ is the input to that neuron, which is ≈ 0. So gradient ≈ 0. Signal dies again._**
+> $$\frac{\partial L}{\partial w} = \frac{\partial L}{\partial a} \times x$$
+>
+> where $x$ is the input to that neuron, which is ≈ 0. So gradient ≈ 0. Signal dies again.
 
 > [!IMPORTANT]  
 > Proper Initialization is an active area of research.  
