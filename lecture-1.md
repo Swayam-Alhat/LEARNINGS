@@ -54,7 +54,7 @@ During backprop, neural network calculates gradients using chain rule. For any w
 
 Here **x** is the local gradient of the weighted sum with respect to **w**. If the neuron computes `z = wx + b`, then `∂z/∂w = x`. So **x** is just the input value to that neuron — which is the sigmoid output of the previous layer. So **x** is always positive.
 
-The **upstream gradient** is everything that came before this step in the chain rule — all the gradients multiplied together from the loss function up to this point. It is a single number that arrives from the right side during backprop, and it is the same value for every weight in that layer.
+The **upstream gradient** is everything that came before this step in the chain rule — all the gradients multiplied together from the loss function up to this point. It is a single number that arrives from the right side during backprop, and it is the same value for every weight in that neuron.
 
 Now since x is always positive, the **sign of `∂L/∂w` is entirely decided by the upstream gradient**. The x part can never flip the sign. It can only scale the magnitude.
 
@@ -62,7 +62,7 @@ Now since x is always positive, the **sign of `∂L/∂w` is entirely decided by
 
 This is where the problem hits.
 
-Every weight **w** in that layer has the same upstream gradient. And all their x values are positive. So **all weights end up with the same sign of gradient** — either all positive or all negative, depending on what the upstream gradient is.
+Every weight **w** in that neuron has the same upstream gradient. And all their x values are positive. So **all weights end up with the same sign of gradient** — either all positive or all negative, depending on what the upstream gradient is.
 
 ---
 
