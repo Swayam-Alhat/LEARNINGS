@@ -99,6 +99,17 @@ Like, it has saturation areas where gradients/slope is very tiny. This stops the
 
 Same as sigmoid, which kills gradients
 
+## Summary - problem with Sigmoid and Tanh
+
+**Problem with tanh and sigmoid**
+They produce very tiny gradient or no gradient when they have extreme input values. Like sigmoid when outputs almost 1 or 0, then during backprop, gradient of sigmoid function with.r.t its input is very small. 
+And when tanh produce -1 or 1, then during backprop, gradient of tanh w.r.t its input is very small.  
+  
+We can see through diagram.  
+
+
+This both leads to small tiny gradients and leads to vanishing gradient problem when this gradient are used in chain rule to calculate further gradients. 
+
 ## ReLU
 
 In 2012 CNN research paper, it stated that ReLU i.e $f(x) = max(0, x)$ works efficiently and network converges quickly
@@ -113,23 +124,23 @@ Points that makes ReLU best choice
 - Experimentally, it is proven that it converges faster
 
 **But**,  
-still, it has some problem
+still, it has minor problem which can be solved
 
-**Dead Neuron Problem in ReLU**
+So ReLU was used. It has valid gradients for positive values. So it works well.  
+  
+But for negative value, relu outputs 0.  
+  
+Now, for this case, it does not matter when this happens for single sample.  
+  
+Example, single input sample, passes though layer. Passes through neuron. Calculates weighted sum, passes it through relu. If its negative , then relu outputs 0. So, during backprop, gradient of this relu w.r.t its input is 0. And this gradient will be used in chain rule to further Calculate gradient. So earlier layers receives 0 gradients.  
+  
+But, other neurons in same layer may produce strong gradients because they can have positive inputs (positive weighted sum). They can send gradient further to earlier layers. So, earlier layers still learns. 
 
-For negative inputs, ReLU outputs 0. During backprop, the local gradient of ReLU for any negative input is also 0.
+This problem is serious when all inputs samples in a batch passes through relu neuron, produce negative weighted sum and outputs 0. This is when Dead ReLU problem occurs.
+Also, all neurons in layers should outputs 0 so to stop learning. And this is very rare.
+---
+**So, ReLU is best option**
 
-Since gradient of this neuron is 0, when chain rule multiplies it with the upstream gradient — the result is 0. So **no gradient flows back through this neuron at all**. Every weight in every layer before this neuron, that depended on this path, receives zero gradient update. The entire backprop chain through this neuron is broken.
-
-This is why it's called a **dead neuron** — it stops contributing to learning completely.
-
-**How does a neuron die?**
-
-If the learning rate is too large, weight updates can overshoot. The weights feeding into a neuron can shift to values where that neuron always receives negative input — for every sample in the dataset. Once that happens, the neuron always outputs 0, always produces zero gradient, and its weights never get updated again. It stays dead permanently for the rest of training.
-
-**Why is this worse than it looks?**
-
-A single dead neuron doesn't just stop learning itself — it silently removes an entire path of gradient flow from the network. If many neurons die (which can happen with a bad learning rate), a significant portion of your network becomes useless and you won't even notice it directly from the loss.
 
 #### TLDR :
 
@@ -137,27 +148,6 @@ A single dead neuron doesn't just stop learning itself — it silently removes a
 - Tryout Leaky ReLU, Maxout
 - Try Tanh but don't expect much
 - Don't use sigmoid
-
----
-
-**Dead Neuron Problem in ReLU**
-
-For negative inputs, ReLU outputs 0. During backprop, the local gradient of ReLU for any negative input is also 0.
-
-Since gradient of this neuron is 0, when chain rule multiplies it with the upstream gradient — the result is 0. So **no gradient flows back through this neuron at all**. Every weight in every layer before this neuron, that depended on this path, receives zero gradient update. The entire backprop chain through this neuron is broken.
-
-This is why it's called a **dead neuron** — it stops contributing to learning completely.
-
-**How does a neuron die?**
-
-If the learning rate is too large, weight updates can overshoot. The weights feeding into a neuron can shift to values where that neuron always receives negative input — for every sample in the dataset. Once that happens, the neuron always outputs 0, always produces zero gradient, and its weights never get updated again. It stays dead permanently for the rest of training.
-
-**Why is this worse than it looks?**
-
-A single dead neuron doesn't just stop learning itself — it silently removes an entire path of gradient flow from the network. If many neurons die (which can happen with a bad learning rate), a significant portion of your network becomes useless and you won't even notice it directly from the loss.
-
----
-
 ---
 
 ## Data preprocessing for images
